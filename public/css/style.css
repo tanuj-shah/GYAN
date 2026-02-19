@@ -1,0 +1,181 @@
+/* GYAN Elite Architectural Specifications */
+
+:root {
+    /* Brand Colors - Nepal Flag Identity */
+    --crimson: #DC143C;
+    --royal-blue: #003893;
+
+    /* Luxury Accents */
+    --gold: #D4AF37;
+    --off-white: #FFFFFF;
+    /* Paper texture feel */
+    --charcoal: #1A1A1A;
+
+    /* Glassmorphism */
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-blur: 16px;
+
+    /* Spacing & Layout */
+    --space-editorial: 50%;
+    /* Whitespace multiplier */
+    /* Sky Blue Gradient Identity */
+    --sky-start: #bee9e8;
+    --sky-mid: #cae9ff;
+    --sky-end: #62b6cb;
+}
+
+/* Base Typography */
+html {
+    background: none !important;
+    background-color: transparent !important;
+}
+
+body {
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+    background-color: transparent !important;
+    /* Let site-bg handle it */
+    color: var(--charcoal);
+}
+
+/* Override utility */
+.no-site-gradient {
+    background: none !important;
+    background-color: white !important;
+}
+
+/* Site Background with Noise Texture */
+.site-bg {
+    /* Layer 1: Subtle Noise Overlay (Data URI for performance/reliability) */
+    /* Layer 2: Sky Blue Gradient */
+    background-image:
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E"),
+        linear-gradient(180deg, var(--sky-start) 0%, var(--sky-mid) 60%, var(--sky-end) 100%) !important;
+
+    background-color: var(--sky-start) !important;
+    /* Fallback */
+    background-repeat: repeat, no-repeat !important;
+    background-attachment: fixed !important;
+    /* Ensures background covers the whole page during scroll */
+    min-height: 100vh;
+}
+
+/* DEBUG: Visually confirm CSS is loading */
+/* body { border: 5px solid red !important; } REMOVED */
+
+/* Utility to opt-out specific elements/pages */
+.no-site-bg {
+    background: white !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+}
+
+.font-serif {
+    font-family: 'Playfair Display', serif;
+}
+
+
+
+/* Navbar - Architectural */
+.nav-hairline {
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    height: 32px;
+    margin: 0 24px;
+}
+
+.glass-nav {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Hero Fog Animation */
+.fog-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 1;
+}
+
+/* Core Pillars - Borderless Grid */
+.pillar-card {
+    position: relative;
+    border-right: 1px solid rgba(0, 0, 0, 0.05);
+    transition: background-color 0.5s ease;
+}
+
+.pillar-card:last-child {
+    border-right: none;
+}
+
+.pillar-card:hover {
+    background-color: #000;
+    color: white;
+}
+
+.pillar-card:hover h3,
+.pillar-card:hover p,
+.pillar-card:hover a {
+    color: white !important;
+    z-index: 10;
+    position: relative;
+}
+
+.pillar-bg {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    z-index: 0;
+}
+
+.pillar-card:hover .pillar-bg {
+    opacity: 0.4;
+}
+
+
+
+/* Testimonials - Split */
+.testimonial-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+}
+
+/* Utilities */
+.text-gold {
+    color: var(--gold);
+}
+
+.text-crimson {
+    color: var(--crimson);
+}
+
+.text-royal {
+    color: var(--royal-blue);
+}
+
+.pill-btn {
+    border: 1px solid var(--crimson);
+    color: var(--crimson);
+    border-radius: 9999px;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    transition: all 0.4s ease;
+    box-shadow: 0 0 0 0 rgba(220, 20, 60, 0.5);
+}
+
+.pill-btn:hover {
+    background-color: var(--crimson);
+    color: white;
+    box-shadow: 0 0 15px rgba(220, 20, 60, 0.4);
+}

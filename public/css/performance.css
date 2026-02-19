@@ -1,0 +1,82 @@
+/* ================================
+   AGGRESSIVE SCROLL PERFORMANCE
+   ================================ */
+
+/* Optimize scroll performance */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    /* Improve rendering performance */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* CSS Containment - Isolate expensive operations */
+.group,
+article {
+    contain: layout style;
+}
+
+/* Disable GPU acceleration for regular elements - only use for animations */
+.transform {
+    transform: translateZ(0);
+    will-change: transform;
+}
+
+/* Disable hover effects that cause repaints - use opacity instead */
+.group:hover img {
+    will-change: transform;
+}
+
+/* Optimize lazy images */
+img[loading="lazy"] {
+    /* content-visibility removed for scroll stability */
+}
+
+/* Disable AOS animations during scroll for performance */
+[data-aos] {
+    transition: none !important;
+}
+
+[data-aos].aos-animate {
+    transition: opacity 0.3s ease, transform 0.3s ease !important;
+}
+
+/* Reduce expensive shadow transitions */
+.shadow-lg,
+.shadow-xl,
+.shadow-2xl {
+    box-shadow: none !important;
+}
+
+.hover\:shadow-xl:hover,
+.hover\:shadow-2xl:hover {
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Simplify transforms - no scale on groups, only on images */
+.group-hover\:scale-105,
+.group-hover\:scale-110,
+.group:hover {
+    transform: none !important;
+}
+
+/* Disable motion for better performance */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    [data-aos] {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}

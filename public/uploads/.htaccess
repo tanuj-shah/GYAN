@@ -1,0 +1,6 @@
+# GYAN Security Configuration - v1.1
+# Prevent PHP execution only
+php_flag engine off
+
+# Disable directory listing
+Options -Indexes

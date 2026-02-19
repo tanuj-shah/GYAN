@@ -1,0 +1,90 @@
+# ===============================================
+# GYAN Core: Clean URLs (Remove .php)
+# ===============================================
+
+# Disable MultiViews to prevent interference with mod_rewrite
+Options -MultiViews
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Exception: Don't rewrite files in api/ directory (preserve .php for POST requests)
+    RewriteCond %{REQUEST_URI} ^/IRD/public/api/ [OR]
+    RewriteCond %{REQUEST_URI} ^/api/
+    RewriteRule ^ - [L]
+
+    # 1. Redirect externally: /page.php to /page
+    # Handles nested paths correctly
+    RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /+(.*)\.php [NC]
+    RewriteRule ^ /%1 [L,R=301]
+
+    # 2. Internal rewrite: /page to /page.php
+    # Works even in subdirectories like /IRD/public/
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME}.php -f
+    RewriteRule ^ %{REQUEST_URI}.php [L]
+</IfModule>
+
+# ===============================================
+# GYAN Performance Optimization: Browser Caching
+# ===============================================
+
+<IfModule mod_expires.c>
+    ExpiresActive On
+    
+    # Images - 1 year
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    
+    # CSS and JavaScript - 1 month
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType text/javascript "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    
+    # Fonts - 1 year
+    ExpiresByType font/woff "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType application/font-woff "access plus 1 year"
+    ExpiresByType application/font-woff2 "access plus 1 year"
+    
+    # HTML - 0 seconds (dynamic PHP pages)
+    ExpiresByType text/html "access plus 0 seconds"
+</IfModule>
+
+# Enable GZIP Compression
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE text/javascript
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/json
+    AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# Security & Performance Headers
+<IfModule mod_headers.c>
+    # Security Headers
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+    
+    # Content Security Policy
+    # Adjust as needed for your specific requirements
+    Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.tailwindcss.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; frame-ancestors 'self';"
+    
+    # HSTS (HTTP Strict Transport Security) - ONLY enable if using HTTPS
+    # Uncomment the line below AFTER enabling HTTPS
+    # Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    
+    # Permissions Policy (formerly Feature-Policy)
+    Header set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+    
+    # Performance: Remove ETags (use Cache-Control instead)
+    Header unset ETag
+    FileETag None
+</IfModule>

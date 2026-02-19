@@ -1,0 +1,49 @@
+# =============================================
+# GYAN Project - .dockerignore
+# Prevents unnecessary files from entering Docker build context
+# =============================================
+
+# Version control
+.git/
+.gitignore
+
+# Environment secrets (injected via docker-compose, not baked into image)
+.env
+.env.local
+.env.*.local
+
+# User-uploaded content (mounted as volume in production)
+public/uploads/profiles/*
+public/uploads/blogs/*
+public/uploads/events/*
+public/uploads/gallery/
+public/uploads/vision2035/*
+
+# Docker configs themselves
+.docker/
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# GitHub workflows & docs
+.github/
+docs/
+README.md
+SECURITY.md
+
+# IDE & agent configs
+.vscode/
+.idea/
+.gemini/
+.agent/
+
+# OS junk
+Thumbs.db
+.DS_Store
+Desktop.ini
+
+# Logs & temp
+*.log
+*.bak
+*.tmp
+*.swp

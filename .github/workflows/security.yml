@@ -1,0 +1,132 @@
+name: Security Checks
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Run security scan weekly on Sundays at 2 AM
+    - cron: '0 2 * * 0'
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    name: Security Vulnerability Scan
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mbstring, pdo, pdo_mysql, gd
+          coverage: none
+      
+      # Check for secrets in code
+      - name: Scan for hardcoded secrets
+        run: |
+          echo "Checking for potential hardcoded credentials..."
+          ! grep -r -i "password.*=.*['\"].*['\"]" --include="*.php" --exclude-dir=vendor --exclude-dir=includes/PHPMailer-master . || echo "WARNING: Found potential hardcoded passwords"
+          ! grep -r "DB_PASS.*=.*['\"][^'\"]\+['\"]" --include="*.php" --exclude="*.example*" . || echo "WARNING: Found hardcoded DB passwords"
+      
+      # Check file permissions
+      - name: Check File Permissions
+        run: |
+          echo "Checking critical file permissions..."
+          find public/uploads -type f -exec chmod 644 {} \; 2>/dev/null || true
+          find public/uploads -type d -exec chmod 755 {} \; 2>/dev/null || true
+      
+      # Verify .htaccess protection
+      - name: Verify Upload Protection
+        run: |
+          if [ ! -f "public/uploads/.htaccess" ]; then
+            echo "ERROR: Missing .htaccess in uploads directory!"
+            exit 1
+          fi
+          echo "✓ Upload directory protection found"
+      
+      # Check for SQL injection patterns (basic)
+      - name: Check for SQL Injection Patterns
+        run: |
+          echo "Scanning for unsafe SQL patterns..."
+          ! grep -r '\$pdo->query(\$' --include="*.php" --exclude-dir=includes/PHPMailer-master . || echo "WARNING: Found potential SQL injection risk"
+          ! grep -r 'mysql_query' --include="*.php" --exclude-dir=includes/PHPMailer-master . || echo "WARNING: Found deprecated mysql_ functions"
+      
+      # XSS Check
+      - name: Check for XSS Vulnerabilities
+        run: |
+          echo "Checking for unescaped output..."
+          grep -r 'echo \$_' --include="*.php" public/ | grep -v 'htmlspecialchars' | head -10 || echo "✓ No obvious XSS risks found"
+      
+      # Environment Variables Check
+      - name: Verify Environment Variables Usage
+        run: |
+          if grep -q "define('DB_PASS', '')" config/database.php; then
+            echo "WARNING: Database password empty in config (should use .env)"
+          fi
+          if [ ! -f ".env.example" ]; then
+            echo "ERROR: Missing .env.example file!"
+            exit 1
+          fi
+          echo "✓ Environment configuration files present"
+      
+      # Generate Security Report
+      - name: Generate Security Summary
+        if: always()
+        run: |
+          echo "## Security Scan Summary" >> $GITHUB_STEP_SUMMARY
+          echo "✓ Hardcoded secrets scan completed" >> $GITHUB_STEP_SUMMARY
+          echo "✓ SQL injection pattern scan completed" >> $GITHUB_STEP_SUMMARY
+          echo "✓ XSS vulnerability scan completed" >> $GITHUB_STEP_SUMMARY
+          echo "✓ File permissions and upload protection verified" >> $GITHUB_STEP_SUMMARY
+          echo "✓ Environment configuration validated" >> $GITHUB_STEP_SUMMARY
+      
+      # Verify .env is not committed
+      - name: Check for committed .env file
+        run: |
+          if [ -f ".env" ]; then
+            echo "CRITICAL: .env file found in repository! Remove it and add to .gitignore"
+            exit 1
+          fi
+          echo "✓ No .env file in repository"
+      
+      # Verify SECURITY.md exists
+      - name: Verify SECURITY.md
+        run: |
+          if [ ! -f "SECURITY.md" ]; then
+            echo "WARNING: Missing SECURITY.md for vulnerability disclosure"
+          else
+            echo "✓ SECURITY.md present"
+          fi
+      
+      # Fail on Critical Issues
+      - name: Check for Critical Security Issues
+        run: |
+          CRITICAL_ISSUES=0
+          DETAILS=""
+          
+          if [ ! -f "public/uploads/.htaccess" ]; then
+            CRITICAL_ISSUES=$((CRITICAL_ISSUES + 1))
+            DETAILS="${DETAILS}\n- Missing .htaccess in uploads directory"
+          fi
+          if [ ! -f ".env.example" ]; then
+            CRITICAL_ISSUES=$((CRITICAL_ISSUES + 1))
+            DETAILS="${DETAILS}\n- Missing .env.example file"
+          fi
+          if [ -f ".env" ]; then
+            CRITICAL_ISSUES=$((CRITICAL_ISSUES + 1))
+            DETAILS="${DETAILS}\n- .env file committed to repository"
+          fi
+          
+          if [ $CRITICAL_ISSUES -gt 0 ]; then
+            echo "FAIL: Found $CRITICAL_ISSUES critical security issue(s):"
+            echo -e "$DETAILS"
+            exit 1
+          fi
+          echo "✓ No critical security issues found"

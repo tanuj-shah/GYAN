@@ -1,0 +1,101 @@
+# =============================================
+# GYAN Project - .gitignore
+# Tailored for: PHP 8.x / Apache / MySQL / Docker
+# Last updated: 2026-02-19
+# =============================================
+
+# -----------------------------------------
+# 1. ENVIRONMENT & SECRETS (CRITICAL)
+# -----------------------------------------
+# Contains DB credentials, SMTP passwords, APP_SECRET_KEY
+.env
+# Never commit any environment variant except .example
+.env.local
+.env.*.local
+
+# -----------------------------------------
+# 2. USER-UPLOADED CONTENT
+# -----------------------------------------
+# User-generated files (profile photos, gallery images, blog media, vision2035 docs)
+# Keep the directory structure and .htaccess (security) but ignore uploaded files
+public/uploads/profiles/*
+public/uploads/blogs/*
+public/uploads/events/*
+public/uploads/gallery/**/*
+public/uploads/vision2035/*
+
+# Preserve .htaccess and .gitkeep inside upload dirs
+!public/uploads/.htaccess
+!public/uploads/**/.htaccess
+!public/uploads/**/.gitkeep
+
+# -----------------------------------------
+# 3. DOCKER VOLUMES & RUNTIME DATA
+# -----------------------------------------
+# MySQL persistent data (created by docker-compose volumes)
+.docker/mysql/data/
+
+# -----------------------------------------
+# 4. PHP / COMPOSER DEPENDENCIES
+# -----------------------------------------
+# If you ever migrate PHPMailer to Composer
+vendor/
+composer.lock
+
+# PHP runtime/cache files
+*.cache
+*.php_cs.cache
+
+# -----------------------------------------
+# 5. IDE & EDITOR CONFIGS
+# -----------------------------------------
+# VS Code
+.vscode/
+# JetBrains (PhpStorm, IntelliJ)
+.idea/
+*.iml
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+# Gemini / AI agent artifacts
+.gemini/
+.agent/
+
+# -----------------------------------------
+# 6. OS-GENERATED FILES
+# -----------------------------------------
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+# macOS
+.DS_Store
+._*
+# Linux
+*~
+
+# -----------------------------------------
+# 7. LOGS & TEMPORARY FILES
+# -----------------------------------------
+*.log
+error_log
+php_errors.log
+npm-debug.log*
+
+# -----------------------------------------
+# 8. BACKUP & TEMP FILES
+# -----------------------------------------
+*.bak
+*.swp
+*.swo
+*.tmp
+*.orig
+*~
+
+# -----------------------------------------
+# 9. SECURITY: Prevent accidental exposure
+# -----------------------------------------
+# Database dumps that may contain user data
+*.sql.gz
+*.sql.bak
+database/backups/
