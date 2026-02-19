@@ -19,7 +19,7 @@ use PHPMailer\PHPMailer\Exception;
  */
 function sendEmail($to, $subject, $body)
 {
-    if (SMTP_USER === 'your-email@gmail.com') {
+    if (SMTP_USER === 'gyan@ird.com.np') {
         // Return simulated success if config not set
         return ['status' => true, 'message' => 'Email simulation: ' . $subject . ' to ' . $to];
     }

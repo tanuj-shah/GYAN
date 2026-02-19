@@ -109,19 +109,19 @@ require_once __DIR__ . '/../includes/header.php';
                 <div class="text-center group" data-aos="fade-up">
                     <div
                         class="text-5xl md:text-7xl font-black text-gray-900 mb-2 group-hover:text-primary transition-colors tabular-nums">
-                        1.2K+</div>
+                        200+</div>
                     <p class="text-xs font-bold text-gray-400 uppercase tracking-[0.2em]">Active Members</p>
                 </div>
                 <div class="text-center group" data-aos="fade-up" data-aos-delay="100">
                     <div
                         class="text-5xl md:text-7xl font-black text-gray-900 mb-2 group-hover:text-primary transition-colors tabular-nums">
-                        45+</div>
+                        20+</div>
                     <p class="text-xs font-bold text-gray-400 uppercase tracking-[0.2em]">Countries Represented</p>
                 </div>
                 <div class="text-center group" data-aos="fade-up" data-aos-delay="200">
                     <div
                         class="text-5xl md:text-7xl font-black text-gray-900 mb-2 group-hover:text-primary transition-colors tabular-nums">
-                        150+</div>
+                        20+</div>
                     <p class="text-xs font-bold text-gray-400 uppercase tracking-[0.2em]">Communities & Forums</p>
                 </div>
                 <div class="text-center group" data-aos="fade-up" data-aos-delay="300">
@@ -133,7 +133,7 @@ require_once __DIR__ . '/../includes/header.php';
                 <div class="text-center group" data-aos="fade-up" data-aos-delay="200">
                     <div
                         class="text-5xl md:text-7xl font-black text-gray-900 mb-2 group-hover:text-primary transition-colors tabular-nums">
-                        500+</div>
+                        50+</div>
                     <p class="text-xs font-bold text-gray-400 uppercase tracking-[0.2em]">Events</p>
                 </div>
             </div>

@@ -63,8 +63,8 @@ require_once __DIR__ . '/../includes/header.php';
                         <div class="ml-4">
                             <h3 class="text-lg font-bold text-gray-900">Email us</h3>
                             <p class="mt-1 text-gray-500">We respond within 24 hours.</p>
-                            <a href="mailto:contact@gyan.org"
-                                class="mt-2 text-primary font-semibold hover:underline block">contact@gyan.org</a>
+                            <a href="mailto:gyan@ird.com.np"
+                                class="mt-2 text-primary font-semibold hover:underline block">gyan@ird.com.np</a>
                         </div>
                     </div>
                 </div>

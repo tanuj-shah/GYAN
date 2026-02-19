@@ -291,8 +291,8 @@ $basePath = $isInAdmin ? '../' : '';
                         </span>
                     </div>
                     <div class="flex items-center space-x-4">
-                        <a href="mailto:info@gyan.org"
-                            class="hover:text-primary-light transition-colors">info@gyan.org</a>
+                        <a href="mailto:gyan@ird.com.np"
+                            class="hover:text-primary-light transition-colors">gyan@ird.com.np</a>
                         <span class="hidden sm:inline">|</span>
                         <a href="tel:+977" class="hidden sm:inline hover:text-primary-light transition-colors">Connect
                             Globally</a>
